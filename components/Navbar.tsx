@@ -19,6 +19,7 @@ const menuItems = [
 
 export default function Navbar() {
   const [activeMenu, setActiveMenu] = useState<number | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-[#121F3D] shadow">
@@ -29,7 +30,18 @@ export default function Navbar() {
             Centro de Bachillerato Tecnológico #44
           </span>
         </div>
-        <ul className="flex space-x-6 font-medium relative">
+        {/* Botón hamburguesa */}
+        <button
+          className="md:hidden text-white focus:outline-none"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Abrir menú"
+        >
+          <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d={mobileOpen ? "M6 18L18 6M6 6l12 12" : "M4 8h16M4 16h16"} />
+          </svg>
+        </button>
+        {/* Menú desktop */}
+        <ul className="hidden md:flex space-x-6 font-medium relative">
           {menuItems.map((item, index) => (
             <li
               key={index}
@@ -68,6 +80,47 @@ export default function Navbar() {
           ))}
         </ul>
       </div>
+      {/* Menú móvil */}
+      {mobileOpen && (
+        <div className="md:hidden bg-[#121F3D] px-4 pb-4">
+          <ul className="flex flex-col space-y-2 font-medium">
+            {menuItems.map((item, index) => (
+              <li key={index} className="relative">
+                {item.link ? (
+                  <Link
+                    href={item.link}
+                    className="block text-white py-2 px-2 rounded hover:bg-[#FF5F2E] hover:text-white transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <>
+                    <span className="block text-white py-2 px-2 rounded">{item.label}</span>
+                    <ul className="pl-4">
+                      {item.items?.map((subItem, subIdx) => (
+                        <li key={subIdx}>
+                          {subItem === "Personal" ? (
+                            <Link
+                              href="/personal"
+                              className="block text-white py-1 px-2 rounded hover:bg-[#FF5F2E] hover:text-white transition-colors"
+                              onClick={() => setMobileOpen(false)}
+                            >
+                              {subItem}
+                            </Link>
+                          ) : (
+                            <span className="block text-white py-1 px-2">{subItem}</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="h-1 bg-[#FF5F2E] w-full" />
     </nav>
   );
