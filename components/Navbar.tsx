@@ -1,0 +1,76 @@
+// components/Navbar.tsx
+import React, { useState } from "react";
+import Link from "next/link";
+
+const menuItems = [
+  { label: "Inicio", link: "/" },
+  {
+    label: "Oferta Académica",
+    items: ["Técnico Agropecuario", "Técnico Desarrollo comunitario", "Técnico en Offimática"],
+  },
+  { label: "Admisiones", link: "/admisiones" },
+  { label: "Programas y Becas", link: "/becas" },
+  {
+    label: "Comunidad",
+    items: ["Estudiantes", "Personal", "Egresados"],
+  },
+  { label: "Nosotros", link: "/nosotros" },
+];
+
+export default function Navbar() {
+  const [activeMenu, setActiveMenu] = useState<number | null>(null);
+
+  return (
+    <nav className="fixed top-0 left-0 w-full z-50 bg-[#121F3D] shadow">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center">
+          <img src="/logo-cbta44.png" alt="Logo" className="w-14 h-auto" />
+          <span className="ml-2 text-lg font-semibold text-white">
+            Centro de Bachillerato Tecnológico #44
+          </span>
+        </div>
+        <ul className="flex space-x-6 font-medium relative">
+          {menuItems.map((item, index) => (
+            <li
+              key={index}
+              className="relative group"
+              onMouseEnter={() => setActiveMenu(index)}
+              onMouseLeave={() => setActiveMenu(null)}
+            >
+              {item.link ? (
+                <Link
+                  href={item.link}
+                  className="text-white hover:text-[#FF5F2E] transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <span className="text-white cursor-pointer hover:text-[#FF5F2E] transition-colors">
+                  {item.label}
+                </span>
+              )}
+              {item.items && activeMenu === index && (
+                <ul className="absolute top-full bg-white text-black rounded shadow-lg w-48 py-2 z-50">
+                  {item.items.map((subItem, subIdx) => (
+                    <li key={subIdx} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      {subItem === "Personal" ? (
+                        <Link href="/personal">
+                          <span>{subItem}</span>
+                        </Link>
+                      ) : (
+                        <span>{subItem}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="h-1 bg-[#FF5F2E] w-full" />
+    </nav>
+  );
+}
+
+

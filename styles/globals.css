@@ -1,0 +1,45 @@
+
+/* Tailwind CSS base layer */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* slick-carousel styles (para react-slick) */
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+/* Scrollbar personalizado (opcional) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #38761D;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Fuente general */
+body {
+  @apply font-sans;
+  scroll-behavior: smooth;
+}
+
+/* Animación opcional al mostrar submenús */
+.menu-enter {
+  opacity: 0;
+  transform: translateY(-5px);
+}
+.menu-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 200ms, transform 200ms;
+}
+.menu-exit {
+  opacity: 1;
+}
+.menu-exit-active {
+  opacity: 0;
+  transition: opacity 200ms;
+}
