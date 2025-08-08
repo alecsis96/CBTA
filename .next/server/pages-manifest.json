@@ -3,7 +3,7 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/admin": "pages/admin.js",
+  "/admin/solicitudes": "pages/admin/solicitudes.js",
   "/": "pages/index.js",
-  "/contacto": "pages/contacto.js",
-  "/nosotros": "pages/nosotros.js"
+  "/admin/noticias": "pages/admin/noticias.js"
 }

@@ -27,15 +27,20 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/contacto": [
+    "/admin": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/contacto.js"
+      "static/chunks/pages/admin.js"
     ],
-    "/nosotros": [
+    "/admin/noticias": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/nosotros.js"
+      "static/chunks/pages/admin/noticias.js"
+    ],
+    "/admin/solicitudes": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/admin/solicitudes.js"
     ]
   },
   "ampFirstPages": []

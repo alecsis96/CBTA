@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { db } from "@/lib/firebaseConfig";
+import { collection, addDoc } from "firebase/firestore";
 
 export default function Admisiones() {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
@@ -18,10 +20,22 @@ export default function Admisiones() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setEnviado(true);
-    // Aquí podrías enviar los datos a un backend o servicio externo
+    try {
+      await addDoc(collection(db, "admisiones"), form);
+      setEnviado(true);
+      setForm({
+        nombre: "",
+        apellido: "",
+        curp: "",
+        email: "",
+        telefono: "",
+        secundaria: "",
+      });
+    } catch (error) {
+      alert("Error al enviar el formulario. Intenta de nuevo.");
+    }
   };
 
   return (
