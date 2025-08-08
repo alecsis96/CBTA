@@ -1,9 +1,10 @@
 // components/Noticias.tsx
-import React from "react";
-import Link from "next/link";
-import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { db } from "@/lib/firebaseConfig";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 
 interface Noticia {
+  id?: string;
   titulo: string;
   fecha: string;
   resumen: string;
@@ -11,67 +12,45 @@ interface Noticia {
   enlace: string;
 }
 
-const noticias: Noticia[] = [
-  {
-    titulo: "Ceremonia de Graduación 2025",
-    fecha: "29 de Julio 2025",
-    resumen: "Celebramos la graduación de nuestros estudiantes con orgullo y alegría.",
-    imagen: "/noticias/img1.jpg",
-    enlace: "/noticias/graduacion-2025",
-  },
-  {
-    titulo: "Comunicado",
-    fecha: "15 de Junio 2025",
-    resumen: "ATENTO COMUNICADO Alumn@s de Nuevo Ingreso al CBTA 44, Ciclo Escolar 2025-2026 .",
-    imagen: "/noticias/comunicado.jpg",
-    enlace: "/noticias/feria-agropecuaria-2025",
-  },
-  {
-    titulo: "Mascota CBTA #44",
-    fecha: "15 de Julio 2025",
-    resumen: "Llegó la Mascota del CBTA 44 .",
-    imagen: "/noticias/mascota2.jpg",
-    enlace: "/noticias/concurso-robotica-2025",
-  },
-];
-
 export default function Noticias() {
+  const [noticias, setNoticias] = useState<Noticia[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const q = query(collection(db, "noticias"), orderBy("fecha", "desc"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const data: Noticia[] = [];
+      querySnapshot.forEach((docu) => {
+        data.push({ id: docu.id, ...docu.data() } as Noticia);
+      });
+      setNoticias(data);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
   return (
     <section className="py-16 px-6 bg-white text-gray-900" aria-label="Noticias recientes">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-[#38761D] mb-12">Noticias</h2>
-        {noticias.length === 0 ? (
+        {loading ? (
+          <p className="text-center text-gray-500">Cargando noticias...</p>
+        ) : noticias.length === 0 ? (
           <p className="text-center text-gray-500">No hay noticias disponibles en este momento.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {noticias.map((noticia, index) => (
-              <div
-                key={index}
-                className="bg-gray-100 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-transform hover:-translate-y-1"
-                aria-label={`Noticia: ${noticia.titulo}`}
-              >
-                <div className="relative w-full h-48">
-                  <Image
-                    src={noticia.imagen}
-                    alt={`Imagen de la noticia: ${noticia.titulo}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    priority={index === 0}
-                  />
-                </div>
-                <div className="p-4">
-                  <h3 className="text-xl font-semibold text-[#121F3D] mb-1">{noticia.titulo}</h3>
-                  <p className="text-sm text-gray-600 mb-2">{noticia.fecha}</p>
-                  <p className="text-base text-gray-800 mb-4">{noticia.resumen}</p>
-                  <Link
-                    href={noticia.enlace}
-                    className="text-[#38761D] font-semibold hover:underline"
-                    aria-label={`Leer más sobre ${noticia.titulo}`}
-                  >
-                    Leer más →
-                  </Link>
-                </div>
+            {noticias.map((noticia) => (
+              <div key={noticia.id} className="bg-[#eafbe7] rounded-xl shadow p-6 flex flex-col">
+                <img src={noticia.imagen} alt={noticia.titulo} className="w-full h-40 object-cover rounded mb-4" />
+                <h3 className="text-xl font-semibold mb-2 text-[#38761D]">{noticia.titulo}</h3>
+                <p className="text-sm text-gray-500 mb-2">{noticia.fecha}</p>
+                <p className="mb-4">{noticia.resumen}</p>
+                <a
+                  href={noticia.enlace}
+                  className="mt-auto inline-block bg-[#38761D] text-white px-4 py-2 rounded hover:bg-[#285214] transition"
+                >
+                  Leer más
+                </a>
               </div>
             ))}
           </div>

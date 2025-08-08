@@ -4,12 +4,9 @@ import Link from "next/link";
 
 const menuItems = [
   { label: "Inicio", link: "/" },
-  {
-    label: "Oferta Académica",
-    items: ["Técnico Agropecuario", "Técnico Desarrollo comunitario", "Técnico en Offimática"],
-  },
+ 
   { label: "Admisiones", link: "/admisiones" },
-  { label: "Programas y Becas", link: "/becas" },
+  //{ label: "Programas y Becas", link: "/becas" },
   {
     label: "Comunidad",
     items: ["Estudiantes", "Personal", "Egresados"],
